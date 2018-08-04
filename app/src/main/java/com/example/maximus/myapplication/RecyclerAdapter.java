@@ -14,7 +14,11 @@ import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
     private List<GitHubModel> gitHubModelList;
-    private String[] jsonData;
+
+    //TODO Add a WebView click (OnClickListener)
+    public interface RecyclerAdapterOnClickHandler {
+        void onClickRepo();
+    }
 
 
     public RecyclerAdapter(List<GitHubModel> gitHubModels) {
@@ -34,7 +38,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         final GitHubModel gitHubModel = gitHubModelList.get(position);
-//        String jsonDescription = jsonData[position];
         holder.repoDescription.setText(gitHubModel.getRepoDescription());
         holder.repoName.setText(gitHubModel.getRepoName());
         holder.repoStars.setText(gitHubModel.getStarsCount());
@@ -70,7 +73,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             repoDescription = itemView.findViewById(R.id.repo_description);
             repoName = itemView.findViewById(R.id.repo_name);
             repoStars = itemView.findViewById(R.id.number_of_stars);
-
 
         }
 

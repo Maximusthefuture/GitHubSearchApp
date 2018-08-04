@@ -1,6 +1,11 @@
-package com.example.maximus.myapplication;
+package com.example.maximus.myapplication.activity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,9 +14,12 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.maximus.myapplication.R;
+import com.example.maximus.myapplication.RecyclerAdapter;
 import com.example.maximus.myapplication.model.GitHubModel;
 import com.example.maximus.myapplication.pref.QueryPreferences;
 import com.example.maximus.myapplication.utils.GithubSearchResponse;
@@ -28,29 +36,91 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private static List<GitHubModel> items;
     private static RecyclerAdapter adapter;
-    private GithubSearchResponse response;
     private ProgressBar progressBar;
+    private ImageView bookmark;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         invalidateOptionsMenu();
-        progressBar = findViewById(R.id.progress_bar);
-        recyclerView = findViewById(R.id.recycler_view);
-//        recyclerView.setHasFixedSize(true);
+        initializeItems();
+        recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         items = new ArrayList<>();
         adapter = new RecyclerAdapter(items);
         recyclerView.setAdapter(adapter);
         updateItems();
+        hideBottomNavigation();
+        bottomNavigationSelector();
+
 
     }
+
+    /*TODO:Add ViewPager*/
+
+
+
+
+    public void initializeItems() {
+        progressBar = findViewById(R.id.progress_bar);
+        recyclerView = findViewById(R.id.recycler_view);
+        bookmark = findViewById(R.id.bookmark_icon);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+    }
+
+    public void hideBottomNavigation() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    bottomNavigationView.setVisibility(View.VISIBLE);
+                }
+
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0 || dy < 0 && bottomNavigationView.isShown()) {
+                    bottomNavigationView.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+
+    //TODO
+    public void clickBookmark(View view) {
+        bookmark = view.findViewById(R.id.bookmark_icon);
+        bookmark.setImageDrawable(getResources().getDrawable(R.drawable.outline_bookmark_border_full_24));
+        Toast.makeText(this, "Bookmark added", Toast.LENGTH_SHORT).show();
+
+    }
+
 
     public void updateItems() {
         String query = QueryPreferences.getStoredQuery(this);
         new GithubQueryTask(query).execute();
+        getSupportActionBar().setTitle(query);
+    }
+
+    //TODO
+    public void bottomNavigationSelector() {
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.bookmark:
+                        return true;
+                }
+
+                return true;
+            }
+        });
     }
 
 
@@ -87,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
     public class GithubQueryTask extends AsyncTask<Void, Void, List<GitHubModel>> {
         private String mQuery;
