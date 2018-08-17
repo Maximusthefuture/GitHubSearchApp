@@ -26,13 +26,12 @@ import java.util.Scanner;
 import static android.content.ContentValues.TAG;
 
 public class NetworkUtils {
+    private static final String ITEMS = "items";
     private static final String TAG = NetworkUtils.class.getSimpleName();
     private final static String GITHUB_BASE_URL =
             "https://api.github.com/search/repositories";
     private final static String PARAM_QUERY = "q";
     private final static String PARAM_SORT = "sort";
-    private static String sortByStars = "stars";
-
 
 
 
@@ -62,7 +61,7 @@ public class NetworkUtils {
 
 
 
-    public static URL buildUrl(String githubSearchQuery) {
+    public static URL buildUrl(String githubSearchQuery, String sortByStars) {
         Uri buildUri = Uri.parse(GITHUB_BASE_URL).buildUpon()
                 .appendQueryParameter(PARAM_QUERY, githubSearchQuery)
                 .appendQueryParameter(PARAM_SORT, sortByStars)
@@ -77,66 +76,44 @@ public class NetworkUtils {
         return url;
     }
 
-    //Took is from SunshineApp App!
-    public static List<GitHubModel> parseJSON(Context context, String JSONStr) throws JSONException {
-
-
-        final String ITEMS = "items";
-
-        final String FULL_NAME = "full_name";
-        final String DESCRIPTION = "description";
-
-
-        List<GitHubModel> gitHubModelArray = new ArrayList<>();
-        GitHubModel gitHubModel;
-
-
-        JSONObject jsonObject = new JSONObject(JSONStr);
-
-        JSONArray itemsArray = jsonObject.getJSONArray(ITEMS);
-
-
-
-
-        for (int i = 0; i < itemsArray.length(); i++) {
-            String description;
-            String fullName;
-            String numberOfStars;
-
-            JSONObject jsonObject1 = itemsArray.getJSONObject(i);
-
-            description = jsonObject1.getString(DESCRIPTION);
-            fullName = jsonObject1.getString(FULL_NAME);
-            numberOfStars = jsonObject1.getString("stargazers_count");
-
-            gitHubModel = new GitHubModel(fullName, numberOfStars, description);
-
-
-            gitHubModelArray.add(gitHubModel);
-
-
-
-
-        }
-
-
-        return gitHubModelArray;
-    }
-
-
+//    //Took is from SunshineApp App!
+//    public static List<GitHubModel> parseJSON(Context context, String JSONStr) throws JSONException {
 //
-//    public void parseJson(List<GitHubModel> itemsArray, JSONObject jsonBody) throws JSONException {
-//        JSONArray itemsJsonArray = jsonBody.getJSONArray("items");
+//        final String ITEMS = "items";
+//        final String FULL_NAME = "full_name";
+//        final String DESCRIPTION = "description";
+//        List<GitHubModel> gitHubModelArray = new ArrayList<>();
+//        GitHubModel gitHubModel;
+//        JSONObject jsonObject = new JSONObject(JSONStr);
+//        JSONArray itemsArray = jsonObject.getJSONArray(ITEMS);
+//        for (int i = 0; i < itemsArray.length(); i++) {
+//            String description;
+//            String fullName;
+//            String numberOfStars;
 //
-//        String jsonArray = itemsJsonArray.toString();
+//            JSONObject jsonObject1 = itemsArray.getJSONObject(i);
 //
-//        Type type = new TypeToken<ArrayList<GitHubModel>>() {
-//        }.getType();
+//            description = jsonObject1.getString(DESCRIPTION);
+//            fullName = jsonObject1.getString(FULL_NAME);
+//            numberOfStars = jsonObject1.getString("stargazers_count");
 //
-//        List<GitHubModel> gitHubModels = new Gson().fromJson(jsonArray, type);
-//
-//        itemsArray.addAll(gitHubModels);
+//            gitHubModel = new GitHubModel(fullName, numberOfStars, description);
+//            gitHubModelArray.add(gitHubModel);
+//        }
+//        return gitHubModelArray;
 //    }
+
+
+
+    public static void parseJson(List<GitHubModel> itemsArray, String JSONStr) throws JSONException {
+        JSONObject jsonObject = new JSONObject(JSONStr);
+        JSONArray itemsArrays = jsonObject.getJSONArray(ITEMS);
+        String jsonArray = itemsArrays.toString();
+        Type type = new TypeToken<ArrayList<GitHubModel>>() {
+        }.getType();
+        List<GitHubModel> gitHubModels = new Gson().fromJson(jsonArray, type);
+        itemsArray.addAll(gitHubModels);
+    }
 
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:defaultValue="@string/sort_by_stars"
+        android:entries="@array/sorting_by_options"
+        android:entryValues="@array/sorting_by_values"
+        android:key="@string/sort_github_key"
+        android:title="Sort by" />
+
+
+    <!--<SwitchPreferenceCompat-->
+        <!--android:key="@string/switch_theme_key"-->
+        <!--android:summary="Dark"-->
+        <!--android:title="@string/switch_theme" />-->
+
+</PreferenceScreen>

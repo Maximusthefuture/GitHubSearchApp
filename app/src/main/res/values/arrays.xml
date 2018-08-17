@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sorting_by_options">
+        <item>@string/sort_by_stars</item>
+        <item>@string/sort_by_forks</item>
+        <item>@string/sort_by_updated</item>
+    </string-array>
+
+    <string-array name="sorting_by_values">
+        <item>@string/sort_by_stars</item>
+        <item>@string/sort_by_forks</item>
+        <item>@string/sort_by_updated</item>
+    </string-array>
+</resources>

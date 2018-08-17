@@ -1,10 +1,24 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Search Github</string>
     <string name="search">Search</string>
     <string name="refresh">Refresh</string>
     <string name="recent">Recent</string>
     <string name="bookmark">Bookmark</string>
 
+
+    <string name="settings">Settings</string>
+    <string name="sort_by_stars">stars</string>
+    <string name="sort_by_forks">forks</string>
+    <string name="sort_by_updated">updated</string>
+    <string name="sort_github_key">sort_github</string>
+    <string name="switch_theme">Switch Theme</string>
+    <string name="dark_theme">Dark</string>
+    <string name="white">Light</string>
+    <string name="switch_theme_key">switch_theme</string>
+    <string name="error_in_rv">Error, try again.</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_bookmarks">You don\'t have any bookmarks</string>
+    <string name="sort">Sort</string>
 </resources>
